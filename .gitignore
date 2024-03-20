@@ -1,6 +1,7 @@
 HELP.md
 .gradle
-build/
+**/build/
+!src/**/build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -35,3 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/_development/postgres_data/
+/_development/elasticsearch_data/
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
