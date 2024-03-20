@@ -1,0 +1,41 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    date-format: ${DATE_FORMAT:yyyy-MM-dd'T'HH:mm:ssZ}
+    time-zone: ${TIME_ZONE:Asia/Ho_Chi_Minh}
+    default-property-inclusion: non_null
+  application:
+    name: ${APPLICATION_NAME:zimji-system-backend}
+  profiles:
+    active: local
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 20MB
+      max-request-size: 200MB
+  messages:
+    basename: language/message
+    encoding: UTF-8
+    cache-duration: -1
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:172.16.101.39}:${DB_PORT:5432}/${DB_NAME:acvn}?stringtype=unspecified
+    username: ${DB_USERNAME:xdp}
+    password: ${DB_PASSWORD:gjEyCJRruMz28kw96OWXy5JBN9pOROXT}
+  kafka:
+    bootstrap-servers: ${KAFKA_URL:172.16.101.36:9092}
+
+logging:
+  level:
+    io.eventuate: debug
+    io.eventuate.tram: trace
+    org.springframework.orm.jpa: trace
+    org.hibernate.SQL: debug
+    org.springframework.jdbc.core: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

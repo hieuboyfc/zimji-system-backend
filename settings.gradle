@@ -1,0 +1,4 @@
+rootProject.name = 'zimji-system-backend'
+include 'system-application'
+include 'system-share'
+include 'system-service'
