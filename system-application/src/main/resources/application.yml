@@ -1,3 +1,8 @@
+server:
+  port: ${PORT:1234}  # Cổng mặc định cho ứng dụng Spring Boot
+  servlet:
+    context-path: /app  # Đường dẫn context cho ứng dụng
+
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -19,15 +24,6 @@ spring:
     basename: language/message
     encoding: UTF-8
     cache-duration: -1
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: update
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:172.16.101.39}:${DB_PORT:5432}/${DB_NAME:acvn}?stringtype=unspecified
-    username: ${DB_USERNAME:xdp}
-    password: ${DB_PASSWORD:gjEyCJRruMz28kw96OWXy5JBN9pOROXT}
   kafka:
     bootstrap-servers: ${KAFKA_URL:172.16.101.36:9092}
 
