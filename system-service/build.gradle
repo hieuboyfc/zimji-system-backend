@@ -14,6 +14,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:${slf4jApiVersion}"
     implementation "ch.qos.logback:logback-core:${logbackVersion}"
     implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
 
     runtimeOnly "org.postgresql:postgresql"
 }
