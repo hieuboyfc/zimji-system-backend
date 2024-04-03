@@ -1,8 +1,12 @@
 package com.zimji.system.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.context.support.StaticMessageSource;
@@ -12,17 +16,20 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MessageContextUtils {
 
-    private static MessageContextUtils instance;
-    private static final String BUNDLE_NAME = "language/message";
-    private static final String LIBRARY_BUNDLE_NAME = "message";
-    private final ResourceBundleMessageSource fileResourceSource = new ResourceBundleMessageSource();
-    private final StaticMessageSource messageSource = new StaticMessageSource();
-    private final Map<Locale, Set<String>> localeCompanies = new ConcurrentHashMap<>();
+    static Logger LOGGER = LoggerFactory.getLogger(DateTimeUtils.class);
 
-    private static final String COMPANY_KEY = "cid";
-    private static final String SEPARATE_KEY = ".";
+    static MessageContextUtils instance;
+    static String BUNDLE_NAME = "language/message";
+    static String LIBRARY_BUNDLE_NAME = "message";
+    ResourceBundleMessageSource fileResourceSource = new ResourceBundleMessageSource();
+    StaticMessageSource messageSource = new StaticMessageSource();
+    Map<Locale, Set<String>> localeCompanies = new ConcurrentHashMap<>();
+
+    static String COMPANY_KEY = "cid";
+    static String SEPARATE_KEY = ".";
 
     public static MessageContextUtils getInstance() {
         if (ObjectUtils.isEmpty(instance)) {
@@ -98,8 +105,8 @@ public class MessageContextUtils {
                     .filter(requestAttributes -> requestAttributes instanceof ServletRequestAttributes)
                     .map(requestAttributes -> ((ServletRequestAttributes) requestAttributes).getRequest())
                     .orElse(null);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
         return null;
     }

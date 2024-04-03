@@ -1,11 +1,12 @@
 package com.zimji.system;
 
-import com.zimji.system.configuration.logback.LogbackConfig;
+import com.zimji.system.configuration.SystemProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableJpaRepositories({"com.zimji.*"})
 @EntityScan(basePackages = {"com.zimji.*"})
+@EnableConfigurationProperties(SystemProperties.class)
 public class SystemApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(SystemApplication.class);

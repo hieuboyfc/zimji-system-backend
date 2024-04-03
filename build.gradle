@@ -79,7 +79,10 @@ subprojects {
         implementation "org.springframework.boot:spring-boot-starter-web"
         implementation "org.springframework.boot:spring-boot-devtools"
 
+        implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openAPIVersion}"
         implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
+        implementation "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+        implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
         implementation "commons-io:commons-io:${commonsIoVersion}"
 
         runtimeOnly "org.postgresql:postgresql"

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,8 +20,21 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+    public ResponseEntity<?> handleMaxSizeException(MaxUploadSizeExceededException e, WebRequest request) {
+        BaseResponse<?> response = BaseResponse.builder()
+                .code(String.valueOf(HttpStatus.PAYLOAD_TOO_LARGE.value()))
+                .timestamp(new Date())
+                .message(e.getMessage())
+                .description(request.getDescription(false))
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException e, WebRequest request) {
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest request) {
         BaseResponse<?> response = BaseResponse.builder()
                 .code(String.valueOf(HttpStatus.NOT_FOUND.value()))
                 .timestamp(new Date())
