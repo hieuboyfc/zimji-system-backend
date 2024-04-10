@@ -38,3 +38,7 @@ system:
   openapi:
     dev-url: http://localhost:8888
     prod-url: https://system-service-api.com
+  parameter:
+    max-age-second: 3600
+  cors:
+    allowed-origins: http://localhost:8888 # Comma separated list of allowed origins

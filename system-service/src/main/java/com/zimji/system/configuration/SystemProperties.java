@@ -18,11 +18,27 @@ public class SystemProperties {
 
     OpenAPI openAPI = new OpenAPI();
 
+    Cors cors = new Cors();
+
+    Parameter parameter = new Parameter();
+
     @Setter
     @Getter
     public static class OpenAPI {
         private String devUrl;
         private String prodUrl;
+    }
+
+    @Setter
+    @Getter
+    public static class Cors {
+        private String[] allowedOrigins;
+    }
+
+    @Setter
+    @Getter
+    public static class Parameter {
+        private int maxAgeSecond;
     }
 
 }

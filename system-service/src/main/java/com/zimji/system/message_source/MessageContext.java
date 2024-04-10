@@ -1,4 +1,4 @@
-package com.zimji.system.utils;
+package com.zimji.system.message_source;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -13,35 +13,40 @@ import org.springframework.context.support.StaticMessageSource;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class MessageContextUtils {
+public class MessageContext {
 
-    static Logger LOGGER = LoggerFactory.getLogger(DateTimeUtils.class);
+    static Logger LOGGER = LoggerFactory.getLogger(MessageContext.class);
 
-    static MessageContextUtils instance;
+    static MessageContext instance = new MessageContext();
     static String BUNDLE_NAME = "language/message";
     static String LIBRARY_BUNDLE_NAME = "message";
-    ResourceBundleMessageSource fileResourceSource = new ResourceBundleMessageSource();
-    StaticMessageSource messageSource = new StaticMessageSource();
+
+    ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+    StaticMessageSource staticMessageSource = new StaticMessageSource();
     Map<Locale, Set<String>> localeCompanies = new ConcurrentHashMap<>();
 
     static String COMPANY_KEY = "cid";
     static String SEPARATE_KEY = ".";
 
-    public static MessageContextUtils getInstance() {
+    public static MessageContext getInstance() {
         if (ObjectUtils.isEmpty(instance)) {
-            instance = new MessageContextUtils();
+            instance = new MessageContext();
         }
         return instance;
     }
 
-    public MessageContextUtils() {
-        fileResourceSource.setBasenames(BUNDLE_NAME, LIBRARY_BUNDLE_NAME);
-        fileResourceSource.setDefaultEncoding("UTF-8");
-        messageSource.setParentMessageSource(fileResourceSource);
+    public MessageContext() {
+        this.resourceBundleMessageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        this.resourceBundleMessageSource.setBasenames(BUNDLE_NAME, LIBRARY_BUNDLE_NAME);
+        this.resourceBundleMessageSource.setUseCodeAsDefaultMessage(true);
+        this.resourceBundleMessageSource.setCacheSeconds(10);
+
+        this.staticMessageSource.setParentMessageSource(resourceBundleMessageSource);
     }
 
     public Map<Locale, Set<String>> getLocaleCompanies() {
@@ -51,12 +56,12 @@ public class MessageContextUtils {
     public static void register(String tag, Map<String, String> language) {
         Locale locale = Locale.forLanguageTag(tag);
         getInstance().localeCompanies.put(locale, language.keySet());
-        getInstance().messageSource.addMessages(language, locale);
-        getInstance().messageSource.setParentMessageSource(getInstance().fileResourceSource);
+        getInstance().staticMessageSource.addMessages(language, locale);
+        getInstance().staticMessageSource.setParentMessageSource(getInstance().resourceBundleMessageSource);
     }
 
     public static void register(Map<String, Map<String, String>> languages) {
-        languages.forEach(MessageContextUtils::register);
+        languages.forEach(MessageContext::register);
     }
 
     public static String getMessage(String key) {
@@ -82,21 +87,21 @@ public class MessageContextUtils {
                 );
                 if (ObjectUtils.isNotEmpty(keys) && keys.contains(code)) {
                     assert locale != null;
-                    return getInstance().getMessageSource().getMessage(code, args, locale);
+                    return getInstance().getStaticMessageSource().getMessage(code, args, locale);
                 }
             }
         }
 
-        if (ObjectUtils.isNotEmpty(getInstance().getMessageSource())) {
+        if (ObjectUtils.isNotEmpty(getInstance().getStaticMessageSource())) {
             assert locale != null;
-            return getInstance().getMessageSource().getMessage(key, args, locale);
+            return getInstance().getStaticMessageSource().getMessage(key, args, locale);
         } else {
             return key;
         }
     }
 
-    public StaticMessageSource getMessageSource() {
-        return messageSource;
+    public StaticMessageSource getStaticMessageSource() {
+        return staticMessageSource;
     }
 
     private static HttpServletRequest getRequest() {
@@ -107,8 +112,8 @@ public class MessageContextUtils {
                     .orElse(null);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
+            return null;
         }
-        return null;
     }
 
 }

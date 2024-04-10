@@ -11,3 +11,8 @@
  '----------------' '----------------' '----------------' '----------------' '----------------' 
 ${application.title} ${application.version}
 Powered by Spring Boot ${spring-boot.version}
+
+${AnsiColor.BRIGHT_BLUE}:: Hiếu Boy 🤓 :: Running Spring Boot ${spring-boot.version} ::
+:: https://www.facebook.com/profile.php?id=100070850815321 :: ${AnsiColor.DEFAULT}
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
